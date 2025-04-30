@@ -135,7 +135,7 @@ mbstrdecoder==1.1.4
 mdit-py-plugins==0.4.2
 mdurl==0.1.2
 memray==1.15.0
-mistral_common==1.5.1
+mistral_common==1.5.4
 mistune==3.1.1
 mpmath==1.3.0
 msgpack==1.1.0
