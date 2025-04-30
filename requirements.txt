@@ -139,7 +139,7 @@ mistral_common==1.5.1
 mistune==3.1.1
 mpmath==1.3.0
 msgpack==1.1.0
-msgspec==0.18.6
+msgspec==0.19.0
 multidict==6.1.0
 multiprocess==0.70.16
 murmurhash==1.0.12
