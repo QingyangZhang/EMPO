@@ -424,19 +424,7 @@ def main(script_args, training_args, model_args):
             prompt.append({"role": "user", "content": "{} Let's think step by step and output the final answer within \\boxed{}".format(example["problem"], "")})
         elif 'RLHF' in script_args.dataset_name:
             prompt.append({"role": "user", "content": "{} Let's think step by step and output the final answer within \\boxed{}".format(example["problem"], "")})
-        elif 'trivia_qa' in script_args.dataset_name:
-            prompt.append({"role": "user",
-                           "content": "Question: {} Reason step by step and put the answer in \\boxed{{}}.".format(example["question"])})
-        elif 'truth' in script_args.dataset_name:
-            prompt.append({"role": "user",
-                            "content": "Question: {} Reason step by step and put the answer in \\boxed{{}}.".format(example["question"])})
-        elif 'natural' in script_args.dataset_name:
-            prompt.append({"role": "user",
-                            "content": "Question: {} Reason step by step and put the answer in \\boxed{{}}.".format(example["question"])})
-        elif 'Natural' in script_args.dataset_name:
-            prompt.append({"role": "user",
-                            "content": "Question: {} Reason step by step and put the answer in \\boxed{{}}.".format(example["question"])})
-        elif 'WebInstruct' in script_args.dataset_name:
+        elif 'natural' in script_args.dataset_name.lower():
             prompt.append({"role": "user",
                             "content": "Question: {} Reason step by step and put the answer in \\boxed{{}}.".format(example["question"])})
         else:
@@ -444,9 +432,7 @@ def main(script_args, training_args, model_args):
             exit()
         return {"prompt": prompt}
 
-    if 'DAPO' in script_args.dataset_name:
-        dataset = dataset.rename_column("prompt", "problem")
-        dataset = dataset.rename_column("target", "solution")
+    
     if 'RLHFlow' in script_args.dataset_name:
         dataset = dataset.rename_column("gt", "solution")
     
@@ -471,7 +457,7 @@ def main(script_args, training_args, model_args):
     
     
     #############################
-    # Initialize the GRPO trainer
+    # Initialize the EMPO trainer
     #############################
     trainer = EMPOTrainer(
         model=model_args.model_name_or_path,

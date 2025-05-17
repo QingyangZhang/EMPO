@@ -39,11 +39,11 @@ HDFS_HOME=TO_BE_DEFINED
 CKPT_PATH="checkpoints"
 base_checkpoint_path=${HDFS_HOME}/${CKPT_PATH}/${RUN_NAME}
 
-# 定义初始化模型路径, SFT模型
+
 init_model_path=$INIT_MODEL_PATH
 chmod +x sh/convert_and_evaluate_gpu.sh
 
-# 调用转化和评估脚本
+
 bash sh/convert_and_evaluate_gpu.sh \
     "$eval_script_path" \
     "$base_checkpoint_path" \

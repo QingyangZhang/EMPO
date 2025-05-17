@@ -12,40 +12,15 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
+# We use the last GPU for semantic clustering
 DEVICE = "cuda:{}".format(torch.cuda.device_count()-1) if torch.cuda.is_available() else "cpu"
 
 
-class BaseEntailment:
-    def save_prediction_cache(self):
-        pass
-
-
-class EntailmentDeberta(BaseEntailment):
-    def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli")
-        self.model = AutoModelForSequenceClassification.from_pretrained(
-            "microsoft/deberta-v2-xlarge-mnli").to(DEVICE)
-        self.model.eval()
-
-    def check_implication(self, text1, text2, *args, **kwargs):
-        inputs = self.tokenizer(text1, text2, return_tensors="pt").to(DEVICE)
-        # The model checks if text1 -> text2, i.e. if text2 follows from text1.
-        # check_implication('The weather is good', 'The weather is good and I like you') --> 1
-        # check_implication('The weather is good and I like you', 'The weather is good') --> 2
-        with torch.no_grad():
-            outputs = self.model.forward(**inputs)
-            logits = outputs.logits
-        # Deberta-mnli returns `neutral` and `entailment` classes at indices 1 and 2.
-        largest_index = torch.argmax(F.softmax(logits, dim=1))  # pylint: disable=no-member
-        prediction = largest_index.cpu().item()
-
-        return prediction
-
 class GeneralVerifier():
     def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained("/apdcephfs_qy3/share_1594716/yataobian/yang/output/data/general-verifier")
+        self.tokenizer = AutoTokenizer.from_pretrained("TIGER-Lab/general-verifier")
         self.model = AutoModelForCausalLM.from_pretrained(
-            "/apdcephfs_qy3/share_1594716/yataobian/yang/output/data/general-verifier",
+            "TIGER-Lab/general-verifier",
         ).to(DEVICE)
         self.model.eval()
 

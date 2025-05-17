@@ -1,25 +1,25 @@
 #!/bin/bash
 set -x
 
-# 参数检查
+
 if [ "$#" -lt 4 ] || [ "$#" -gt 5 ]; then
     echo "Usage: $0 <eval_script_path> <base_checkpoint_path> <init_model_path> <template> [tp_size]"
     exit 1
 fi
 
-# 获取参数
+
 eval_script_path=$1
 base_checkpoint_path=$2
 init_model_path=$3
 template=$4
-tp_size=${5:-1}  # 如果未提供第5个参数，默认为1
+tp_size=${5:-1}  # default 1
 actor_dir="_actor"
 
-# 获取可用的GPU数量
-NUM_GPUS=$(nvidia-smi --query-gpu=gpu_name --format=csv,noheader | wc -l)
-NUM_GPU_GROUPS=$((NUM_GPUS / tp_size))  # 计算可用的GPU组数
 
-# 函数：复制 tokenizer 文件
+NUM_GPUS=$(nvidia-smi --query-gpu=gpu_name --format=csv,noheader | wc -l)
+NUM_GPU_GROUPS=$((NUM_GPUS / tp_size))
+
+
 copy_tokenizer_files() {
     local ckpt_path=$1
     local init_model_path=$2
@@ -36,15 +36,14 @@ copy_tokenizer_files() {
     if [ -f "$init_model_path/merges.txt" ]; then
         files_to_copy+=("merges.txt")
     fi
-    # 创建目标路径，确保它存在
+    
     if [ ! -d "$ckpt_path" ]; then
         mkdir -p "$ckpt_path"
         echo "Created checkpoint directory: $ckpt_path" >&2
     else
         echo "Checkpoint directory already exists: $ckpt_path" >&2
     fi
-
-    # 复制每个文件
+    
     for filename in "${files_to_copy[@]}"; do
         src="$init_model_path/$filename"
         dst="$ckpt_path/$filename"
@@ -57,12 +56,11 @@ copy_tokenizer_files() {
     done
 }
 
-# 函数：获取所有需要评估的检查点，并过滤掉已评估的
+
 get_checkpoints_to_evaluate() {
     local base_path="$1"
     local checkpoints=()
     
-    # 查找所有global_step*目录
     for ckpt_dir in "$base_path/$actor_dir"/global_step*; do
         if [ -d "$ckpt_dir" ]; then
             step_tag=$(basename "$ckpt_dir")
@@ -70,7 +68,7 @@ get_checkpoints_to_evaluate() {
         fi
     done < <(find "$base_path/$actor_dir" -maxdepth 1 -type d -name "global_step*" -print0)
     
-    # 正确输出数组内容
+    
     if [ ${#checkpoints[@]} -eq 0 ]; then
         echo ""
     else
@@ -78,12 +76,11 @@ get_checkpoints_to_evaluate() {
     fi
 }
 
-# 函数：在指定GPU上处理单个检查点
+
 process_checkpoint() {
     local step_tag=$1
     local group_id=$2
     
-    # 计算该组的GPU ID范围
     local start_gpu=$((group_id * tp_size))
     local gpu_ids=""
     for ((i=0; i<tp_size; i++)); do
@@ -128,7 +125,7 @@ if [ ${#checkpoints_to_evaluate[@]} -eq 0 ]; then
     echo "No new checkpoints to evaluate." >&2
     exit 0
 fi
-# 检查GPU数量是否满足tp_size要求
+
 if [ $((NUM_GPUS % tp_size)) -ne 0 ]; then
     echo "Error: Number of available GPUs ($NUM_GPUS) is not divisible by tp_size ($tp_size)" >&2
     exit 1
@@ -137,15 +134,13 @@ fi
 echo "Found ${#checkpoints_to_evaluate[@]} checkpoints to evaluate:" >&2
 printf '%s\n' "${checkpoints_to_evaluate[@]}" >&2
 
-# 并行处理检查点，按GPU组分配
+
 for i in "${!checkpoints_to_evaluate[@]}"; do
     group_id=$((i % NUM_GPU_GROUPS))
     step_tag="${checkpoints_to_evaluate[i]}"
     
-    # 在后台启动处理任务
     process_checkpoint "$step_tag" "$group_id" &
     
-    # 每启动NUM_GPU_GROUPS个任务后等待它们完成
     if [ $(((i + 1) % NUM_GPU_GROUPS)) -eq 0 ]; then
         wait
     fi
