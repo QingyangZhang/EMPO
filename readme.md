@@ -4,7 +4,8 @@
 
 
 <a href="https://huggingface.co/collections/qingyangzhang/empo-67f9f7ad7817ebff4b664010">🤗 HF Models and Datasets Collection </a> |
-<a href="https://arxiv.org/abs/2504.05812"> 📑 Arxiv Preprint </a>
+<a href="https://arxiv.org/abs/2504.05812"> 📑 Arxiv Preprint </a> |
+<a href="https://huggingface.co/blog/qingyangzhang/empo"> 🤗 Huggingface Article </a>
 
 ## 🆕 News
 
