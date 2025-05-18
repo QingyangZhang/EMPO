@@ -16,7 +16,7 @@
 EMPO (Entropy Minimized Policy Optimization) does not require any supervised information for incentivizing reasoning capabilities (i.e., neither verifiable reasoning traces, problems with golden answers, nor additional pre-trained reward models). By continuously minimizing the predictive entropy of LLMs on unlabeled user queries in a latent semantic space, EMPO enables purely self-supervised evolution of reasoning capabilities with strong flexibility and practicality.
 
 <p align="center">
-<img src="./figs/EMPO.jpg" width="850" height="320">
+<img src="./figs/EMPO.jpg" width="600" height="320">
 </p>
 
 ## 🏗️ Quick Start
@@ -59,7 +59,7 @@ We are still working on cleaning the code. Stay tuned.
 ## 🏆 Performance
 
 <p align="center">
-<img src="./figs/fancy_plot.jpg" width="425" height="160">
+<img src="./figs/fancy_plot.jpg" width="300" height="160">
 </p>
 
 ## 🙏 Acknowlegement
