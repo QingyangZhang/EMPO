@@ -3,8 +3,6 @@
 <b>A Fully Unsupervised Implementation for Training R1-Zero-like Reasoning Models. </b>
 
 
-![visitor count](https://komarev.com/ghpvc/?username=QingyangZhang&repo=EMPO)
-
 <a href="https://huggingface.co/collections/qingyangzhang/empo-67f9f7ad7817ebff4b664010">🤗 HF Models and Datasets Collection </a> |
 <a href="https://arxiv.org/abs/2504.05812"> 📑 Arxiv Preprint </a>
 
