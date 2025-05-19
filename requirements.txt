@@ -28,5 +28,5 @@ triton==3.1.0
 trl==0.14.0
 vllm==0.7.2
 wandb==0.19.6
-wheel==0.44.0
+wheel==0.45.1
 xformers==0.0.28.post3
