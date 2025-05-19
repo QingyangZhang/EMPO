@@ -14,7 +14,7 @@ numpy==1.26.4
 pandas==2.2.3
 peft==0.14.0
 pillow==10.4.0
-safetensors==0.4.5
+safetensors==0.5.3
 scikit-learn==1.6.0
 scipy==1.14.1
 sympy==1.13.1
