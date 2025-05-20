@@ -8,7 +8,7 @@ import os
 
 from latex2sympy2_extended import NormalizationConfig
 from math_verify import LatexExtractionConfig, parse, verify
-from semantic_uncertainty import EntailmentDeberta, GeneralVerifier, get_semantic_ids, cluster_assignment_entropy, get_semantic_ids_by_rule, are_equivalent
+from semantic_uncertainty import GeneralVerifier, get_semantic_ids, cluster_assignment_entropy, get_semantic_ids_by_rule, are_equivalent
 from rouge import Rouge
 rouge = Rouge()
 

@@ -29,10 +29,8 @@ from configs import GRPOConfig
 from rewards import (
     get_math_accuracy_reward,
     get_general_accuracy_reward,
-    get_repetition_penalty_reward,
     get_empo_math_reward,
     get_empo_common_reward,
-    exact_match_reward,
     total_entropy_reward,
 )
 from utils.callbacks import get_callbacks
@@ -401,15 +399,10 @@ def main(script_args, training_args, model_args):
 
     # Get reward functions
     REWARD_FUNCS_REGISTRY = {
-        "exact_match": exact_match_reward,
         "empo_common": get_empo_common_reward(print_outputs=script_args.print_outputs),
         "math_accuracy": get_math_accuracy_reward(extract_answer=script_args.extract_answer),
         "general_accuracy": get_general_accuracy_reward(),
         "empo_math": get_empo_math_reward(num_generations=training_args.num_generations),
-        "repetition_penalty": get_repetition_penalty_reward(
-            ngram_size=script_args.repetition_n_grams,
-            max_penalty=script_args.repetition_max_penalty,
-        ),
         "total_entropy": total_entropy_reward,
     }
     reward_funcs = [REWARD_FUNCS_REGISTRY[func] for func in script_args.reward_funcs]
