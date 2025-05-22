@@ -2,6 +2,7 @@
 
 <b>A Fully Unsupervised Implementation for Training R1-Zero-like Reasoning Models. </b>
 
+If you find this work helpful, please consider to **star🌟** this repo. Thanks for your support!
 
 <a href="https://huggingface.co/collections/qingyangzhang/empo-67f9f7ad7817ebff4b664010">🤗 HF Models and Datasets Collection </a> |
 <a href="https://arxiv.org/abs/2504.05812"> 📑 Arxiv Preprint </a>
@@ -73,7 +74,8 @@ There are many awesome works related to this paper that you may also interested 
 - LLM Uncertainty Quantification: [Semantic Entropy (ICLR'23, Nature'24)](https://openreview.net/pdf?id=VD-AYtP0dve)
 - Test-time Adaption in Computer Vision: [COME (ICLR'25)](https://openreview.net/pdf?id=506BjJ1ziZ)
 - Presudo Feedback for LLM Reasoning: [PFPO (ICLR'25 spotlight)](https://arxiv.org/abs/2411.16345)
-- Test-time Reinforcement Learning: [TTRL (cocurrent work, first released at 2025.04.22)](https://arxiv.org/abs/2504.16084)
+- Test-time Reinforcement Learning: [TTRL (cocurrent work)](https://arxiv.org/abs/2504.16084)
+- In-depth analysis of entropy minimization: [The Unreasonable Effectiveness of Entropy Minimization in LLM Reasoning](https://www.arxiv.org/abs/2505.15134)
 
 ## 🖊️ Citation
 
