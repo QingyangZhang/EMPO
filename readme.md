@@ -75,6 +75,7 @@ There are many awesome works related to this paper that you may also interested 
 - Test-time Adaption in Computer Vision: [COME (ICLR'25)](https://openreview.net/pdf?id=506BjJ1ziZ)
 - Presudo Feedback for LLM Reasoning: [PFPO (ICLR'25 spotlight)](https://arxiv.org/abs/2411.16345)
 - Test-time Reinforcement Learning: [TTRL (cocurrent work)](https://arxiv.org/abs/2504.16084)
+- Uncertainty-Aware Policy Optimization: [SEED-GRPO (cocurrent work)](https://arxiv.org/pdf/2505.12346)
 - In-depth analysis of entropy minimization: [The Unreasonable Effectiveness of Entropy Minimization in LLM Reasoning](https://www.arxiv.org/abs/2505.15134)
 
 ## 🖊️ Citation
