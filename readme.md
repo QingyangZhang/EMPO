@@ -5,7 +5,8 @@
 If you find this work helpful, please consider to **star🌟** this repo. Thanks for your support!
 
 <a href="https://huggingface.co/collections/qingyangzhang/empo-67f9f7ad7817ebff4b664010">🤗 HF Models and Datasets Collection </a> |
-<a href="https://arxiv.org/abs/2504.05812"> 📑 Arxiv Preprint </a>
+<a href="https://arxiv.org/abs/2504.05812"> 📑 Arxiv Preprint </a> |
+<a href="https://bluewhale.yataobian.com/blog/2025/EMPO-Fully-Unsupervised-LLM-Reasoning-Incentivization"> 🧐 English Blog </a>
 
 ## 🆕 News
 
