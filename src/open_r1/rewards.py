@@ -147,6 +147,7 @@ def get_random_math_reward(extract_answer=False):
 def get_empo_math_reward(num_generations):
     def semantic_entropy_math_reward(completions, problem, **kwargs):
         """Reward function that checks if the completion is the same as the ground truth."""
+        local_rank = int(os.environ.get("LOCAL_RANK", -1))
         all_contents = [completion[0]["content"] for completion in completions]
         all_rewards = []
 
@@ -191,13 +192,13 @@ def get_empo_math_reward(num_generations):
             for index in range(len(contents)):
                 # entropy thresholding to filter out highly unreliable answers
                 if total_entropy < math.log(n_generations):
-                    reward = math.log(probabilities[semantic_ids[index]])
+                    reward = probabilities[semantic_ids[index]]
                     rewards.append(reward)
                 else:
                     rewards.append(0.0)
         
             all_rewards.extend(rewards)
-        #print("RANK: {}, Contents: {}, Probability: {}, Semantic ID: {}, Reward: {}".format(local_rank, contents, probabilities, semantic_ids, rewards))
+        print("RANK: {}, Contents: {}, Probability: {}, Semantic ID: {}, Reward: {}".format(local_rank, predictions, probabilities, semantic_ids, rewards))
         return all_rewards
         
     return semantic_entropy_math_reward
