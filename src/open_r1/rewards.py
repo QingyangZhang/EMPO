@@ -11,18 +11,20 @@ from math_verify import LatexExtractionConfig, parse, verify
 from semantic_uncertainty import GeneralVerifier, get_semantic_ids, cluster_assignment_entropy, get_semantic_ids_by_rule, are_equivalent
 from rouge import Rouge
 rouge = Rouge()
+import random
 
-
+# Correctness reward for GRPO
 def get_math_accuracy_reward(extract_answer=True):
     def accuracy_reward(completions, solution, **kwargs):
         """Accuracy reward function for mathematical reasoning tasks"""
-        #local_rank = int(os.environ.get("LOCAL_RANK", -1))
+        local_rank = int(os.environ.get("LOCAL_RANK", -1))
         contents = [completion[0]["content"] for completion in completions]
         rewards = []
+        predictions = []
         
         for content, sol in zip(contents, solution):
             # extract prediction
-            prediction = parse(
+            result = parse(
                 content,
                 extraction_config=[
                     LatexExtractionConfig(
@@ -41,6 +43,15 @@ def get_math_accuracy_reward(extract_answer=True):
                     ],
                     extraction_mode="first_match",
                 )
+
+            if len(result) == 0:
+                prediction = ''
+            elif len(result) == 1:
+                prediction = normalize_prediction(result[0])
+            elif len(result) > 1:
+                prediction = normalize_prediction(result[-1])
+            predictions.append(prediction)
+            
             # extract gold answer
             if extract_answer:
                 gold_answer = parse(
@@ -59,11 +70,80 @@ def get_math_accuracy_reward(extract_answer=True):
         
             rewards.append(reward)
 
+        print("RANK: {}, Preds: {}, Golden Answers: {}, Reward: {}".format(local_rank, predictions, solution, rewards))
+
         return rewards
 
     return accuracy_reward
 
+    
+# Formatted Random Reward baseline suggested by "Spurious Rewards: Rethinking Training Signals in RLVR"
+def get_random_math_reward(extract_answer=False):
+    def random_math_reward(completions, solution, **kwargs):
+        """Accuracy reward function for mathematical reasoning tasks"""
+        local_rank = int(os.environ.get("LOCAL_RANK", -1))
+        contents = [completion[0]["content"] for completion in completions]
+        rewards = []
+        predictions = []
+        
+        for content, sol in zip(contents, solution):
+            # extract prediction
+            result = parse(
+                content,
+                extraction_config=[
+                    LatexExtractionConfig(
+                        normalization_config=NormalizationConfig(
+                        nits=False,
+                        malformed_operators=False,
+                        basic_latex=True,
+                        equations=True,
+                        boxed="all",
+                        units=True,
+                        ),
+                        # Ensures that boxed is tried first
+                        boxed_match_priority=0,
+                        try_extract_without_anchor=False,
+                    )
+                    ],
+                    extraction_mode="first_match",
+                )
 
+            if len(result) == 0:
+                prediction = ''
+            elif len(result) == 1:
+                prediction = normalize_prediction(result[0])
+            elif len(result) > 1:
+                prediction = normalize_prediction(result[-1])
+            predictions.append(prediction)
+            
+            # extract gold answer
+            if extract_answer:
+                gold_answer = parse(
+                    sol,
+                    extraction_mode="first_match",
+                    extraction_config=[LatexExtractionConfig()],
+                )
+            else:
+                gold_answer = solution
+                
+            if len(gold_answer) != 0:
+                if len(prediction) > 0:
+                    reward = random.uniform(0,1)
+                else:
+                    reward = 0.0
+            else:
+                print('Fail to parse gold answer, skip.')
+                reward = 0.0
+        
+            rewards.append(reward)
+
+        print("RANK: {}, Preds: {}, Golden Answers: {}, Reward: {}".format(local_rank, predictions, solution, rewards))
+
+        return rewards
+
+    return random_math_reward
+
+# Semantic Entropy Reward for our EMPO in Mathematical Reasoning
 def get_empo_math_reward(num_generations):
     def semantic_entropy_math_reward(completions, problem, **kwargs):
         """Reward function that checks if the completion is the same as the ground truth."""
@@ -122,7 +202,7 @@ def get_empo_math_reward(num_generations):
         
     return semantic_entropy_math_reward
 
-    
+# This reward is only for visualization only    
 def total_entropy_reward(completions, problem, **kwargs):
     """This function is used for visualization only."""
     contents = [completion[0]["content"] for completion in completions]
@@ -166,8 +246,7 @@ def total_entropy_reward(completions, problem, **kwargs):
     
     return rewards
 
-
-#verifier = EntailmentDeberta()
+# verifier is only used in natural reasoning tasks
 #verifier = GeneralVerifier()
 
 def normalize_prediction(final_answer):
@@ -181,7 +260,7 @@ def normalize_prediction(final_answer):
 
     return final_answer
 
-
+# Reward for our EMPO in Natural Reasoning Tasks
 def get_empo_common_reward(print_outputs=False):
     def semantic_prob_reward(completions, question, **kwargs):
         local_rank = int(os.environ.get("LOCAL_RANK", -1))
@@ -261,9 +340,66 @@ def get_empo_common_reward(print_outputs=False):
 
     return semantic_prob_reward
 
+# Formatted Random Reward suggested by "Spurious Rewards: Rethinking Training Signals in RLVR"
+def get_random_general_reward():
+    def random_reward(completions, reference_answer, question, **kwargs):
+        """Generalized accuracy reward function for free-form natural reasoning tasks."""
+        local_rank = int(os.environ.get("LOCAL_RANK", -1))
+        contents = [completion[0]["content"] for completion in completions]
+        rewards = []
+        predictions = []
+        gold_answers = reference_answer
+        
+        for content, sol in zip(contents, reference_answer):
+            # extract prediction
+            result = parse(
+                content,
+                extraction_config=[
+                    LatexExtractionConfig(
+                        normalization_config=NormalizationConfig(
+                        nits=False,
+                        malformed_operators=False,
+                        basic_latex=False,
+                        equations=True,
+                        boxed="all",
+                        units=True,
+                        ),
+                        # Ensures that boxed is tried first
+                        boxed_match_priority=0,
+                        try_extract_without_anchor=False,
+                    )
+                    ],
+                    extraction_mode="first_match",
+                )
+            
+            if len(result) == 0:
+                prediction = ''
+            elif len(result) == 1:
+                prediction = normalize_prediction(result[0])
+            elif len(result) > 1:
+                prediction = normalize_prediction(result[-1])
+            predictions.append(prediction)
 
+        for prediction, gold_answer in zip(predictions, gold_answers):
+            try:
+                if prediction == '':
+                    reward = -0.5
+                else:
+                    reward = random.uniform(0,1)
+            except:
+                print(f'RANK {local_rank}: Skip over-long answer to avoid OOM.')
+                return [0.0] * len(predictions)
+        
+            rewards.append(reward)
 
+        print("RANK: {},\n Question: {},\n Output: {}, Answers: {},\n Reward: {}\n\n".
+                  format(local_rank, question[0], predictions, gold_answers, rewards))
 
+        return rewards
+
+    return random_reward
+
+# Correctness Reward for GRPO
 def get_general_accuracy_reward():
     def accuracy_reward(completions, reference_answer, question, **kwargs):
         """Generalized accuracy reward function for free-form natural reasoning tasks."""
