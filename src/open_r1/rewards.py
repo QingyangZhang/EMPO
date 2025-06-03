@@ -158,29 +158,35 @@ def get_empo_math_reward(num_generations):
             predictions = []
         
             for index, content in enumerate(contents):
-                answer_parsed = parse(
+                result = parse(
                     content,
                     extraction_config=[
                         LatexExtractionConfig(
                             normalization_config=NormalizationConfig(
-                                nits=False,
-                                malformed_operators=False,
-                                basic_latex=True,
-                                equations=True,
-                                boxed="all",
-                                units=True,
+                            nits=False,
+                            malformed_operators=False,
+                            basic_latex=True,
+                            equations=True,
+                            boxed="all",
+                            units=True,
                             ),
                             # Ensures that boxed is tried first
                             boxed_match_priority=0,
                             try_extract_without_anchor=False,
                         )
-                    ],
-                    extraction_mode="first_match",
-                )
-                if len(answer_parsed) == 0:
-                    predictions.append('no answer {}'.format(index))
-                else:
-                    predictions.append(answer_parsed)
+                        ],
+                        extraction_mode="first_match",
+                    )
+
+                if len(result) == 0:
+                    prediction = ''
+                elif len(result) == 1:
+                    prediction = normalize_prediction(result[0])
+                # if there are multiple answers in boxed, we extract the last one as final answer
+                elif len(result) > 1:
+                    prediction = normalize_prediction(result[-1])
+                    
+                predictions.append(prediction)
         
             semantic_ids = get_semantic_ids_by_rule(predictions, rule=verify)
             n_generations = len(semantic_ids)
@@ -192,7 +198,11 @@ def get_empo_math_reward(num_generations):
             for index in range(len(contents)):
                 # entropy thresholding to filter out highly unreliable answers
                 if total_entropy < math.log(n_generations):
-                    reward = probabilities[semantic_ids[index]]
+                    if predictions[index] == ''
+                        reward = 0.0
+                    else:
+                        reward = probabilities[semantic_ids[index]]
+                    
                     rewards.append(reward)
                 else:
                     rewards.append(0.0)
