@@ -1,7 +1,5 @@
 # EMPO: Fully Unsupervised LLM Reasoning Incentivization
 
-<b>A Fully Unsupervised Implementation for Training R1-Zero-like Reasoning Models. </b>
-
 
 <a href="https://huggingface.co/collections/qingyangzhang/empo-67f9f7ad7817ebff4b664010">🤗 HF Models and Datasets Collection </a> |
 <a href="https://arxiv.org/abs/2504.05812"> 📑 Arxiv Preprint </a>
@@ -14,6 +12,7 @@ If you find this work helpful, please consider to **star🌟** this repo. Thanks
 
 - [2025-04-08] We introduce EMPO, which makes the first attempt on fully unsupervised LLM reasoning incentivization. Check out our arxiv preprint (first released at 2025.04.08): https://arxiv.org/abs/2504.05812
 - [2025-04-30] We release the training and evaluation code for both mathematical reasoning and free-form natural reasoning tasks.
+- [2025-06-04] We add the baselines suggested by Spurious Rewards. Our previous claim holds.
 
 ## 🎯 Overview
 
@@ -39,6 +38,13 @@ Training with EMPO:
 sh empo-1.5B-NM-COT-20K.sh
 ```
 
+By default, the code will print the model's final answers, semantic cluster results, semantic probability and EMPO rewards like:
+
+```
+RANK: 2, Contents: ['630', '315', '210', '315', '315', '315', '210'], Probability: [0.14285714 0.57142857 0.28571429], Semantic ID: [0, 1, 2, 1, 1, 1, 2], Reward: [0.14285714285714285, 0.5714285714285714, 0.2857142857142857, 0.5714285714285714, 0.5714285714285714, 0.5714285714285714, 0.2857142857142857]
+```
+
+
 Evaluation:
 
 ```
@@ -46,9 +52,9 @@ cd eval_math
 sh test.sh
 ```
 
-We directly borrow the evaluation scripts from the Online-DPO-R1 project. Please refer to [Online-DPO-R1][https://github.com/RLHFlow/Online-DPO-R1] for more details.
+We directly borrow the evaluation scripts from the Online-DPO-R1 project. Please refer to [Online-DPO-R1](https://github.com/RLHFlow/Online-DPO-R1) for more details.
 
-As suggested by [Spurious Rewards](https://rethink-rlvr.notion.site/Spurious-Rewards-Rethinking-Training-Signals-in-RLVR-1f4df34dac1880948858f95aeb88872f) and [Incorrect Baseline](https://safe-lip-9a8.notion.site/Incorrect-Baseline-Evaluations-Call-into-Question-Recent-LLM-RL-Claims-2012f1fbf0ee8094ab8ded1953c15a37#2022f1fbf0ee80cb9b18f7eac460410a), we adpot the same test prompt to both pre-RL Qwen Base models and RL-trained models. You can also modify the default test prompt in [here](https://github.com/QingyangZhang/EMPO/blob/main/eval_math/utils.py#L140).
+As suggested by [Spurious Rewards](https://rethink-rlvr.notion.site/Spurious-Rewards-Rethinking-Training-Signals-in-RLVR-1f4df34dac1880948858f95aeb88872f) and [Incorrect Baseline](https://safe-lip-9a8.notion.site/Incorrect-Baseline-Evaluations-Call-into-Question-Recent-LLM-RL-Claims-2012f1fbf0ee8094ab8ded1953c15a37#2022f1fbf0ee80cb9b18f7eac460410a), we adpot the same test prompt to both pre-RL Qwen Base models and RL-trained models. Besdies, we add Random+Format Reward Baseline for more comprehensive comparison. You can also modify the default test prompt in [here](https://github.com/QingyangZhang/EMPO/blob/main/eval_math/utils.py#L140) to investigate the influence of different test prompt.
 
 | Model                          | Supervision    | MATH | Minerva Math | Olympiad Bench | AIME24 | AMC23 | Avg. |
 |--------------------------------|----------------|------|--------------|----------------|--------|-------|------|
@@ -68,11 +74,11 @@ As suggested by [Spurious Rewards](https://rethink-rlvr.notion.site/Spurious-Rew
 | Qwen2.5-Math w/GRPO            | $\{q, a\}$     | 77.8 | 39.7         | 39.1           | 20.0   | 57.5  | 46.8 |
 | Qwen2.5-Math w/EMPO            | $\{q\}$        | 78.0 | 40.4         | 37.3           | 20.0   | 65.0  | 48.1 |
 
-The pre-RL results in our EMPO are similar to that reported by [Absolute-Zero](https://arxiv.org/abs/2505.03335).
+Noted that the pre-RL results in our EMPO are similar to that reported by [Absolute-Zero](https://arxiv.org/abs/2505.03335).
 
 ### Free-form Natural Reasoning
 
-First, you need to uncomment the code on line 17 in src/open-r1/reward.py and use the verifier.
+First, you need to uncomment the code in line 17 of reward.py [here](https://github.com/QingyangZhang/EMPO/blob/main/src/reward.py#L17) and use the verifier (a Small Language Model from [General Reasonor Project](https://huggingface.co/TIGER-Lab/general-verifier))
 
 ```
 verifier = GeneralVerifier()
@@ -90,11 +96,7 @@ Noted that the verifier will be mapped to the last available GPU.
 
 Assume that you have 8 GPUs in total, the default mapping would be:
 
-GPU 0-5: Training
-
-GPU 6: Generation
-
-GPU 7: Verifier
+GPU 0-5: Training, GPU 6: Generation (vllm), GPU 7: Verifier
 
 Evaluation:
 
