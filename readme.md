@@ -12,6 +12,7 @@ If you find this work helpful, please consider to **star🌟** this repo. Thanks
 
 - [2025-04-08] We introduce EMPO, which makes the first attempt on fully unsupervised LLM reasoning incentivization. Check out our arxiv preprint (first released at 2025.04.08): https://arxiv.org/abs/2504.05812
 - [2025-04-30] We release the training and evaluation code for both mathematical reasoning and free-form natural reasoning tasks.
+- [2025-06-04] We add the baselines suggested by Spurious Rewards. Our previous claim holds.
 
 ## 🎯 Overview
 
@@ -70,7 +71,7 @@ Noted that the pre-RL results in our EMPO are similar to that reported by [Absol
 
 ### Free-form Natural Reasoning
 
-First, you need to uncomment the code on line 17 in src/open-r1/reward.py and use the verifier.
+First, you need to uncomment the code on line 17 in src/open-r1/reward.py and use the verifier (a Small Language Model from [General Reasonor Project](https://huggingface.co/TIGER-Lab/general-verifier))
 
 ```
 verifier = GeneralVerifier()
@@ -88,11 +89,7 @@ Noted that the verifier will be mapped to the last available GPU.
 
 Assume that you have 8 GPUs in total, the default mapping would be:
 
-GPU 0-5: Training
-
-GPU 6: Generation
-
-GPU 7: Verifier
+GPU 0-5: Training, GPU 6: Generation (vllm), GPU 7: Verifier
 
 Evaluation:
 
