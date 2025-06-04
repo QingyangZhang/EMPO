@@ -71,7 +71,7 @@ Noted that the pre-RL results in our EMPO are similar to that reported by [Absol
 
 ### Free-form Natural Reasoning
 
-First, you need to uncomment the code on line 17 in src/open-r1/reward.py and use the verifier (a Small Language Model from [General Reasonor Project](https://huggingface.co/TIGER-Lab/general-verifier))
+First, you need to uncomment the code in line 17 of reward.py [here](https://github.com/QingyangZhang/EMPO/blob/main/src/reward.py#L17) and use the verifier (a Small Language Model from [General Reasonor Project](https://huggingface.co/TIGER-Lab/general-verifier))
 
 ```
 verifier = GeneralVerifier()
