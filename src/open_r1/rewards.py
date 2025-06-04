@@ -13,6 +13,9 @@ from rouge import Rouge
 rouge = Rouge()
 import random
 
+# verifier is only used in natural reasoning tasks
+#verifier = GeneralVerifier()
+
 # Correctness reward for GRPO
 def get_math_accuracy_reward(extract_answer=True):
     def accuracy_reward(completions, solution, **kwargs):
@@ -198,7 +201,7 @@ def get_empo_math_reward(num_generations):
             for index in range(len(contents)):
                 # entropy thresholding to filter out highly unreliable answers
                 if total_entropy < math.log(n_generations):
-                    if predictions[index] == ''
+                    if predictions[index] == '':
                         reward = 0.0
                     else:
                         reward = probabilities[semantic_ids[index]]
@@ -257,8 +260,7 @@ def total_entropy_reward(completions, problem, **kwargs):
     
     return rewards
 
-# verifier is only used in natural reasoning tasks
-#verifier = GeneralVerifier()
+
 
 def normalize_prediction(final_answer):
     """

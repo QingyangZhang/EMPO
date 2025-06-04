@@ -38,12 +38,19 @@ sh empo-1.5B-NM-COT-20K.sh
 Evaluation:
 
 ```
-sh eval_math/test.sh
+cd eval_math
+sh test.sh
 ```
 
 We directly borrow the evaluation scripts from the Online-DPO-R1 project. Please refer to [Online-DPO-R1][https://github.com/RLHFlow/Online-DPO-R1] for more details.
 
 ### Free-form Natural Reasoning
+
+First, you need to uncomment the code on line 17 in src/open-r1/reward.py and use the verifier.
+
+```
+verifier = GeneralVerifier()
+```
 
 Training with EMPO:
 
@@ -51,9 +58,27 @@ Training with EMPO:
 sh empo-3B-NR-50K.sh
 ```
 
+Noted that the verifier will be mapped to the last available GPU.
+
+Assume that you have 8 GPUs in total, the mapping would be:
+
+GPU 0-5: Training
+GPU 6: Generation
+GPU 7: Verifier
+
 Evaluation:
 
-We are still working on cleaning the code. Stay tuned.
+```
+cd eval_natural
+```
+and then
+```
+sh script/eval/mmlu_pro.sh
+```
+or
+```
+sh script/eval/gpqa.sh
+```
 
 
 ## 🏆 Performance
