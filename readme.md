@@ -38,6 +38,13 @@ Training with EMPO:
 sh empo-1.5B-NM-COT-20K.sh
 ```
 
+By default, the code will print the model's final answers, semantic cluster results, semantic probability and EMPO rewards like:
+
+```
+RANK: 2, Contents: ['630', '315', '210', '315', '315', '315', '210'], Probability: [0.14285714 0.57142857 0.28571429], Semantic ID: [0, 1, 2, 1, 1, 1, 2], Reward: [0.14285714285714285, 0.5714285714285714, 0.2857142857142857, 0.5714285714285714, 0.5714285714285714, 0.5714285714285714, 0.2857142857142857]
+```
+
+
 Evaluation:
 
 ```
