@@ -69,12 +69,26 @@ python -m eval.gpqa.run_eval \
     --use_chat_format \
     --chat_formatting_function eval.templates.create_prompt_with_huggingface_tokenizer_template \
 '''
-    
+
+'''
 python -m eval.gpqa.run_eval \
     --data_dir data/eval/gpqa \
     --save_dir results/GPQA/Qwen2.5-3B-Random-0-shot \
     --model /apdcephfs_qy3/share_1594716/yataobian/yang/output/data/Qwen2.5-3B-Random-Natural-Reasoning   \
     --tokenizer /apdcephfs_qy3/share_1594716/yataobian/yang/output/data/Qwen2.5-3B-Random-Natural-Reasoning   \
+    --eval_batch_size 32 \
+    --ntrain 0 \
+    --cot \
+    --use_vllm \
+    --use_chat_format \
+    --chat_formatting_function eval.templates.create_prompt_with_huggingface_tokenizer_template \
+'''
+
+python -m eval.gpqa.run_eval \
+    --data_dir data/eval/gpqa \
+    --save_dir results/GPQA/Qwen2.5-7B-Rand-0-shot \
+    --model /apdcephfs_qy3/share_1594716/yataobian/yang/output/data/Qwen2.5-NR-7B-random-natural_reasoning_simple   \
+    --tokenizer /apdcephfs_qy3/share_1594716/yataobian/yang/output/data/Qwen2.5-NR-7B-random-natural_reasoning_simple   \
     --eval_batch_size 32 \
     --ntrain 0 \
     --cot \

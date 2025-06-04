@@ -5,12 +5,10 @@ import numpy as np
 import pandas as pd
 import json
 from tqdm import tqdm
-from eval.mmlu_pro.categories import subcategories, categories
+from eval.gpqa.categories import subcategories, categories
 from eval.utils import get_next_word_predictions, load_hf_tokenizer, load_hf_lm, query_openai_chat_model, dynamic_import_function, upload_results_to_hf, check_and_upload_model_metadata, generate_completions
 import vllm
-from eval.MATH.examplars import EXAMPLARS as MATH_EXAMPLARS
-from eval.MATH.utilities import last_boxed_only_string, remove_boxed
-from eval.MATH.minerva_utils import normalize_final_answer, get_unnormalized_answer, is_equiv, r1_normalize_final_answer, mmlu_normalize_final_answer
+from eval.mmlu_pro.mmlu_utils import mmlu_normalize_final_answer
 
 from latex2sympy2_extended import NormalizationConfig
 from math_verify import LatexExtractionConfig, parse, verify
@@ -342,35 +340,16 @@ def main(args):
         json.dump(
             {
                 "average_acc": weighted_acc,
+                "subcat_acc": {
+                    subcat: np.mean(np.concatenate(subcat_cors[subcat]))
+                    for subcat in subcat_cors
+                },
                 "cat_acc": {
-                    cat: np.mean(cat_cors[cat])
+                    cat: np.mean(np.concatenate(cat_cors[cat]))
                     for cat in cat_cors
                 },
             },
             f,
-        )
-
-    if args.upload_to_hf is not None:
-        # upload metrics to HF. Main metric is the accuracy
-        results = {
-            "average_acc": weighted_acc,
-            "cat_acc": {
-                cat: np.mean(cat_cors[cat])
-                for cat in cat_cors
-            },
-        }
-        task_name = f"oi_mmlu_{args.ntrain}shots"
-        primary_score = results["average_acc"]
-        upload_results_to_hf(
-            results,
-            args.upload_to_hf,
-            args.hf_upload_name,
-            task_name=task_name,
-            primary_score=primary_score,
-            prepend_timestamp=True,
-        )
-        check_and_upload_model_metadata(
-            args.model_name_or_path, args.upload_to_hf, args.hf_upload_name, hf_revision=args.hf_revision
         )
 
 
