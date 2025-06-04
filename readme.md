@@ -52,9 +52,9 @@ cd eval_math
 sh test.sh
 ```
 
-We directly borrow the evaluation scripts from the Online-DPO-R1 project. Please refer to [Online-DPO-R1](https://github.com/RLHFlow/Online-DPO-R1) for more details.
+We directly borrow the evaluation scripts from the [Online-DPO-R1](https://github.com/RLHFlow/Online-DPO-R1), please refer to the original codebase for more details.
 
-As suggested by [Spurious Rewards](https://rethink-rlvr.notion.site/Spurious-Rewards-Rethinking-Training-Signals-in-RLVR-1f4df34dac1880948858f95aeb88872f) and [Incorrect Baseline](https://safe-lip-9a8.notion.site/Incorrect-Baseline-Evaluations-Call-into-Question-Recent-LLM-RL-Claims-2012f1fbf0ee8094ab8ded1953c15a37#2022f1fbf0ee80cb9b18f7eac460410a), we adpot the same test prompt to both pre-RL Qwen Base models and RL-trained models. Besdies, we add Random+Format Reward Baseline for more comprehensive comparison. You can also modify the default test prompt in [here](https://github.com/QingyangZhang/EMPO/blob/main/eval_math/utils.py#L140) to investigate the influence of different test prompt.
+As suggested by [Spurious Rewards](https://rethink-rlvr.notion.site/Spurious-Rewards-Rethinking-Training-Signals-in-RLVR-1f4df34dac1880948858f95aeb88872f) and [Incorrect Baseline](https://safe-lip-9a8.notion.site/Incorrect-Baseline-Evaluations-Call-into-Question-Recent-LLM-RL-Claims-2012f1fbf0ee8094ab8ded1953c15a37#2022f1fbf0ee80cb9b18f7eac460410a), we adpot the same test prompt to both pre-RL Qwen Base models and RL-trained models. Besdies, we add Random+Format Reward Baseline for more comprehensive comparison. You can also modify the code [here](https://github.com/QingyangZhang/EMPO/blob/main/eval_math/utils.py#L140) to investigate the influence of different test prompt.
 
 | Model                          | Supervision    | MATH | Minerva Math | Olympiad Bench | AIME24 | AMC23 | Avg. |
 |--------------------------------|----------------|------|--------------|----------------|--------|-------|------|
@@ -74,7 +74,7 @@ As suggested by [Spurious Rewards](https://rethink-rlvr.notion.site/Spurious-Rew
 | Qwen2.5-Math w/GRPO            | $\{q, a\}$     | 77.8 | 39.7         | 39.1           | 20.0   | 57.5  | 46.8 |
 | Qwen2.5-Math w/EMPO            | $\{q\}$        | 78.0 | 40.4         | 37.3           | 20.0   | 65.0  | 48.1 |
 
-Noted that the pre-RL results in our EMPO are similar to that reported by [Absolute-Zero](https://arxiv.org/abs/2505.03335).
+Noted that the pre-RL results (Qwen-7B-Math) in our paper (30.7) are similar to that reported by [Absolute-Zero](https://arxiv.org/abs/2505.03335) (32.0).
 
 ### Free-form Natural Reasoning
 
