@@ -8,7 +8,7 @@ huggingface-hub==0.26.2
 latex2sympy2
 latex2sympy2_extended
 math-verify==0.6.0
-ninja==1.11.1.2
+ninja==1.11.1.4
 nltk==3.9.1
 numpy==1.26.4
 pandas==2.2.3
