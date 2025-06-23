@@ -13,7 +13,7 @@ If you find this work helpful, please consider to **star🌟** this repo. Thanks
 - [2025-04-08] We introduce EMPO, which makes the first attempt on fully unsupervised LLM reasoning incentivization. Check out our arxiv preprint (first released at 2025.04.08): https://arxiv.org/abs/2504.05812
 - [2025-04-30] We release the training and evaluation code for both mathematical reasoning and free-form natural reasoning tasks.
 - [2025-06-04] We add the baselines suggested by Spurious Rewards. Our previous claim holds.
-- [2025-06-10] EMPO was accepted by ICML 2025 Test-time Adaption Workshop. See you in Vancouver!
+- [2025-06-10] EMPO was accepted by ICML 2025 Test-time Adaption Workshop. See you in Vancouver!  
 ## 🎯 Overview
 
 EMPO (Entropy Minimized Policy Optimization) does not require any supervised information for incentivizing reasoning capabilities (i.e., neither verifiable reasoning traces, problems with golden answers, nor additional pre-trained reward models). By continuously minimizing the predictive entropy of LLMs on unlabeled user queries in a latent semantic space, EMPO enables purely self-supervised evolution of reasoning capabilities with strong flexibility and practicality.
