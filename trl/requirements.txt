@@ -21,7 +21,7 @@ scipy==1.14.1
 sympy==1.13.1
 tiktoken==0.7.0
 tokenizers==0.21.0
-torch==2.5.1
+torch==2.8.0
 torchaudio==2.5.1
 torchvision==0.20.1
 transformers==4.48.3
