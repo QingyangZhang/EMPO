@@ -5,7 +5,7 @@ flash_attn @ https://github.com/Dao-AILab/flash-attention/releases/download/v2.6
 httpcore==1.0.7
 httptools==0.6.4
 httpx==0.28.1
-huggingface-hub==0.26.2
+huggingface-hub==0.35.1
 latex2sympy2
 latex2sympy2_extended
 math-verify==0.6.0
