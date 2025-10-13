@@ -85,7 +85,7 @@ We report pass@1 with greedy decoding for all datasets.
 | Qwen2.5-Math                   | None           | 66.4 | 19.1         | 33.8           | 3.3    | 42.5  | 33.0 |
 | Qwen2.5-Math w/EMPO            | $\{q\}$        | 77.6 | 36.0         | 39.5           | 10.0   | 50.0  | 42.6 |
 | **7B model**                   |                |      |              |                |        |       |      |
-| Qwen2.5-Math                   | None           | 70.2 | 12.5         | 30.8           | 10.0   | 45.0  | 30.7 |
+| Qwen2.5-Math                   | None           | 70.2 | 12.5         | 30.8           | 10.0   | 45.0  | 33.7 |
 | Qwen2.5-Math w/EMPO            | $\{q\}$        | 81.4 | 42.3         | 46.1           | 23.3   | 65.0  | 51.6 |
 
 Noted that due to different 1) evaluation proxy 2) RL framework and 3) hardware, the above results are different from those reported in our early revisions.
