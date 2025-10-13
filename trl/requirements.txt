@@ -11,7 +11,7 @@ latex2sympy2_extended
 math-verify==0.6.0
 ninja==1.11.1.2
 nltk==3.9.1
-numpy==1.26.4
+numpy==2.3.3
 pandas==2.2.3
 peft==0.14.0
 pillow==10.4.0
