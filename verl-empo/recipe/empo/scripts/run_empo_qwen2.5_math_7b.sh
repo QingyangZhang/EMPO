@@ -16,7 +16,6 @@ echo "HAS_NVLINK: $HAS_NVLINK (detected $NVLINK_COUNT NVLink references)"
 
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 export NCCL_NVLS_ENABLE="${HAS_NVLINK:-0}"
-# export NCCL_NVLS_ENABLE=False
 export MASTER_ADDR="${MASTER_ADDR:-127.0.0.1}"
 
 export WANDB_DIR="/mnt/shared-storage-user/p1-shared/zhangqingyang/wandb"
@@ -180,5 +179,5 @@ HYDRA_FULL_ERROR=1 python3 -m recipe.physics.src.main_dapo \
     trainer.save_freq=32 \
     trainer.total_epochs=1000 \
     trainer.default_local_dir="${CKPTS_DIR}" \
-    trainer.resume_from_path=/mnt/shared-storage-user/zhangqingyang/ckpts/PHYSICS-R1-30B/ttrl_Qwen3_30B_0917_all_testset-030231/best_val/ \
+    trainer.resume_from_path=None \
     trainer.resume_mode=disable 2>&1 | tee outputs/${exp_name}-6.log
