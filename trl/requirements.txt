@@ -18,7 +18,7 @@ pillow==10.4.0
 safetensors==0.4.5
 scikit-learn==1.6.0
 scipy==1.14.1
-sympy==1.13.1
+sympy==1.14.0
 tiktoken==0.7.0
 tokenizers==0.21.0
 torch==2.5.1
