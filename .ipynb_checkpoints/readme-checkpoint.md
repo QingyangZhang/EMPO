@@ -9,7 +9,7 @@ For any questions, feel free to open an issue or directly contact to [Qingyang Z
 If you find this repo helpful, please consider to **star🌟** this repo for support our work.
 
 ## News
-- [2025-09-20] EMPO has been accepted by NeurIPS as a Spotlight!
+- [2025-09-20] EMPO has been accepted by NeurIPS as a Spotlight! See you in San Diego!
 - [2025-04-30] We release the training and evaluation code for both mathematical reasoning and free-form natural reasoning tasks.
 - [2025-04-08] We introduce EMPO, which makes the first attempt on fully unsupervised LLM reasoning incentivization. Check out our arxiv preprint (first released at 2025.04.08): https://arxiv.org/abs/2504.05812
 
@@ -75,25 +75,26 @@ cd verl-empo
 sh recipe/empo/scripts/run_empo_qwen2.5_math_7b.sh
 ```
 
+### Experimental Results
 
-| Model                          | Supervision    | MATH | Minerva Math | Olympiad Bench | AIME24 | AMC23 | Avg. |
+We report pass@1 with greedy decoding for all datasets.
+
+| Model                          | Supervision    | MATH500 | Minerva   | Olympiad Bench | AIME24 | AMC23 | Avg. |
 |--------------------------------|----------------|------|--------------|----------------|--------|-------|------|
 | **1.5B model**                 |                |      |              |                |        |       |      |
-| Qwen2.5-Math                   | None           | 52.2 | 10.7         | 25.2           | 10.0   | 42.5  | 28.1 |
-| Qwen2.5-Math-Instruct          | $\{q, r, a\}$  | 73.8 | 30.9         | 38.7           | 6.7    | 52.5  | 40.5 |
-| Qwen2.5-Math w/SFT             | $\{q, r, a\}$  | 61.8 | 26.1         | 27.1           | 3.3    | 37.5  | 31.2 |
-| Qwen2.5-Math w/Rand Format     | $\{q, a\}$     | 65.0 | 26.1         | 30.7           | 10.0   | 55.0  | 37.4 |
-| Qwen2.5-Math w/GRPO            | $\{q, a\}$     | 75.2 | 32.0         | 33.6           | 16.7   | 52.5  | 42.0 |
-| Qwen2.5-Math w/EMPO            | $\{q\}$        | 73.0 | 32.4         | 36.6           | 13.3   | 55.0  | 42.1 |
+| Qwen2.5-Math                   | None           | 66.4 | 19.1         | 33.8           | 3.3    | 42.5  | 33.0 |
+| Qwen2.5-Math w/EMPO            | $\{q\}$        | 77.6 | 36.0         | 39.5           | 10.0   | 50.0  | 42.6 |
 | **7B model**                   |                |      |              |                |        |       |      |
-| Qwen2.5-Math                   | None           | 64.8 | 15.1         | 26.7           | 6.7    | 40.0  | 30.7 |
-| Qwen2.5-Math Instruct          | $\{q, r, a\}$  | 82.8 | 43.8         | 41.2           | 16.7   | 62.5  | 49.4 |
-| Qwen2.5-Math w/SFT             | $\{q, r, a\}$  | 72.2 | 34.6         | 33.2           | 10.0   | 45.0  | 39.0 |
-| Qwen2.5-Math w/Rand Format     | $\{q, a\}$     | 73.0 | 26.5         | 37.0           | 26.7   | 52.5  | 43.1 |
-| Qwen2.5-Math w/ODPO            | $\{q, a\}$     | 76.8 | 30.9         | 37.9           | 26.7   | 62.5  | 47.0 |
-| Qwen2.5-Math w/GRPO            | $\{q, a\}$     | 77.8 | 39.7         | 39.1           | 20.0   | 57.5  | 46.8 |
-| Qwen2.5-Math w/EMPO            | $\{q\}$        | 78.0 | 40.4         | 37.3           | 20.0   | 65.0  | 48.1 |
+| Qwen2.5-Math                   | None           | 70.2 | 12.5         | 30.8           | 10.0   | 45.0  | 30.7 |
+| Qwen2.5-Math w/EMPO            | $\{q\}$        | 81.4 | 42.3         | 46.1           | 23.3   | 65.0  | 51.6 |
 
+Noted that due to different 1) evaluation proxy 2) RL framework and 3) hardware, the above results are different from those reported in our early revisions.
+
+### Models and Wandb log
+
+|HF Models | Wandb Logs|
+|----------|-----------|
+|TBD       | TBD       |
 
 ## Acknowledgement
 
