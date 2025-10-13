@@ -14,17 +14,11 @@ else
 fi
 echo "HAS_NVLINK: $HAS_NVLINK (detected $NVLINK_COUNT NVLink references)"
 
-# 设置推荐环境变量（如有必要，可移动到 rjob submit 的 --env 参数中）
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 export NCCL_NVLS_ENABLE="${HAS_NVLINK:-0}"
 # export NCCL_NVLS_ENABLE=False
 export MASTER_ADDR="${MASTER_ADDR:-127.0.0.1}"
 
-
-#export SWANLAB_API_KEY="i3fSd5Un24j2mdCeT4P4T"
-#export SWANLAB_LOG_DIR="/mnt/shared-storage-user/p1-shared/zhangqingyang/swanlab"
-#export SWANLAB_MODE="local"
-export WANDB_API_KEY=="df98424ea48b641a2ce20d9192aebf65fa8e23e3"
 export WANDB_DIR="/mnt/shared-storage-user/p1-shared/zhangqingyang/wandb"
 
 export VLLM_USE_V1=1
