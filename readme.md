@@ -68,16 +68,22 @@ As trl 0.14.0 is already a relatively outdated training framework. We highly rec
 Place the train and val data from ['math_data'](./math_data) in your local path.
 
 
-### Reproduce EMPO
+### Train with EMPO
 
 ```
 cd verl-empo
 sh recipe/empo/scripts/run_empo_qwen2.5_math_7b.sh
 ```
 
+### Evaluation
+
+Load verl checkpoints by modifying trainer.resume_from_path.
+
+Calculate pass@1 accuracy with greedy decoding by setting actor_rollout_ref.rollout.val_kwargs.do_sample=False.
+
 ### Experimental Results
 
-We report pass@1 with greedy decoding for all datasets.
+We report pass@1 with greedy decoding at global step 192 for all datasets.
 
 | Model                          | Supervision    | MATH500 | Minerva   | Olympiad Bench | AIME24 | AMC23 | Avg. |
 |--------------------------------|----------------|------|--------------|----------------|--------|-------|------|
@@ -88,7 +94,7 @@ We report pass@1 with greedy decoding for all datasets.
 | Qwen2.5-Math                   | None           | 70.2 | 12.5         | 30.8           | 10.0   | 45.0  | 33.7 |
 | Qwen2.5-Math w/EMPO            | $\{q\}$        | 81.4 | 42.3         | 46.1           | 23.3   | 65.0  | 51.6 |
 
-Noted that due to different 1) evaluation proxy 2) RL framework and 3) hardware, the above results are different from those reported in our early revisions.
+Noted that due to different 1) evaluation proxy 2) RL framework and 3) GPU hardware, the above results are different from those reported in our early preprint.
 
 ### Models and Wandb log
 
