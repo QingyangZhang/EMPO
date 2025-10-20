@@ -59,7 +59,7 @@ gen_prompt_bsz=$((train_prompt_bsz * 1))
 train_prompt_mini_bsz=32
 n_resp_per_prompt=16
 
-exp_name="EMPO-Qwen2.5-Math-7B"
+exp_name="GRPO-Qwen2.5-Math-7B"
 
 # Ray
 RAY_ADDRESS=${RAY_ADDRESS:-"http://localhost:8265"}
@@ -177,6 +177,7 @@ HYDRA_FULL_ERROR=1 python3 -m recipe.physics.src.main_dapo \
     trainer.val_only=False \
     trainer.test_freq=8 \
     trainer.save_freq=32 \
+    trainer.total_train_steps=300 \
     trainer.total_epochs=1000 \
     trainer.default_local_dir="${CKPTS_DIR}" \
     trainer.resume_from_path=None \

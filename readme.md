@@ -63,6 +63,8 @@ As trl 0.14.0 is already a relatively outdated training framework. We highly rec
 ## Verl Quick Start
 > Developed upon verl==0.4.x. See [`verl`](./verl/README.md) for details.
 
+The recommended docker image with pre-built dependency is verlai/verl:app-verl0.4-vllm0.8.5-mcore0.13.0-preview.
+
 ### Data Preparation
 
 Place the train and val data from ['math_data'](./math_data) in your local path.
@@ -83,15 +85,24 @@ Calculate pass@1 accuracy with greedy decoding by setting actor_rollout_ref.roll
 
 ### Experimental Results
 
-We report pass@1 with greedy decoding at global step 192 for all datasets.
+We report pass@1 with greedy decoding for all datasets.
 
 | Model                          | Supervision    | MATH500 | Minerva   | Olympiad Bench | AIME24 | AMC23 | Avg. |
 |--------------------------------|----------------|------|--------------|----------------|--------|-------|------|
 | **1.5B model**                 |                |      |              |                |        |       |      |
-| Qwen2.5-Math                   | None           | 66.4 | 19.1         | 33.8           | 3.3    | 42.5  | 33.0 |
+| Qwen2.5-Math Base              | None           | 66.4 | 19.1         | 33.8           | 3.3    | 42.5  | 33.0 |
+| Qwen2.5-Math Instruct          | $\{q,a\}$      | 75.2 | 33.8         | 42.8           | 6.7    | 52.5  | 42.2 |
+| Qwen2.5-Math w/GSPO            | $\{q,a\}$      | 78.0 | 37.1         | 39.1           | 10.0   | 50.0  | 42.8 |
 | Qwen2.5-Math w/EMPO            | $\{q\}$        | 77.6 | 36.0         | 39.5           | 10.0   | 50.0  | 42.6 |
+| **3B model**                   |                |      |              |                |        |       |      |
+| OctoThinker-Long Base          | None           | 15.8 |  2.9         |  7.5           |  0.0   | 12.5  |  7.7 |
+| OctoThinker-Long Zero          | $\{q,a\}$      | 69.6 | 27.6         | 32.0           | 13.3   | 42.5  | 37.0 |
+| OctoThinker-Long w/GSPO        | $\{q,a\}$      | 65.0 | 23.5         | 27.3           |  6.7   | 32.5  | 31.0 |
+| OctoThinker-Long w/EMPO        | $\{q\}$        | 60.6 | 17.3         | 23.6           |  6.7   | 30.0  | 27.6 |
 | **7B model**                   |                |      |              |                |        |       |      |
-| Qwen2.5-Math                   | None           | 70.2 | 12.5         | 30.8           | 10.0   | 45.0  | 33.7 |
+| Qwen2.5-Math Base              | None           | 70.2 | 12.5         | 30.8           | 10.0   | 45.0  | 33.7 |
+| Qwen2.5-Math Instruct          | $\{q,a\}$      | 80.8 | 41.9         | 49.2           | 13.3   | 67.5  | 50.5 |
+| Qwen2.5-Math w/GSPO            | $\{q,a\}$      | 82.4 | 45.2         | 47.6           | 23.3   | 60.0  | 51.7 |
 | Qwen2.5-Math w/EMPO            | $\{q\}$        | 81.4 | 42.3         | 46.1           | 23.3   | 65.0  | 51.6 |
 
 Noted that due to different 1) evaluation proxy 2) RL framework and 3) GPU hardware, the above results are different from those reported in our early preprint.
@@ -113,7 +124,7 @@ There are many awesome works related to this paper that you may also interested 
 
 - LLM Uncertainty Quantification: [Semantic Entropy (ICLR'23, Nature'24)](https://openreview.net/pdf?id=VD-AYtP0dve)
 - Test-time Adaption in Computer Vision: [COME (ICLR'25)](https://openreview.net/pdf?id=506BjJ1ziZ)
-- Presudo Feedback for LLM Reasoning: [PFPO (ICLR'25 spotlight)](https://arxiv.org/abs/2411.16345)
+- Pseudo Feedback for LLM Reasoning: [PFPO (ICLR'25 spotlight)](https://arxiv.org/abs/2411.16345)
 - Test-time Reinforcement Learning: [TTRL (cocurrent work)](https://arxiv.org/abs/2504.16084)
 
 More papers are listed in [Awesome Reinforcement Learning with Internal Reward Paper list](https://github.com/QingyangZhang/Label-Free-RLVR).
