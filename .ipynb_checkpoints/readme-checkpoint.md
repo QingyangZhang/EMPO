@@ -111,7 +111,9 @@ Noted that due to different 1) evaluation proxy 2) RL framework and 3) GPU hardw
 
 |HF Models | Wandb Logs|
 |----------|-----------|
-|TBD       | TBD       |
+|[Qwen2.5-Math-1.5B w/ EMPO](https://huggingface.co/qingyangzhang/EMPO-Qwen2.5-Math-7B)       | [Wandb Report](https://api.wandb.ai/links/zqyoung1127-tianjin-university/kquibtp8)       |
+|[Qwen2.5-Math-7B w/ EMPO](https://huggingface.co/qingyangzhang/EMPO-Qwen2.5-Math-1.5B)       | [Wandb Report](https://api.wandb.ai/links/zqyoung1127-tianjin-university/kquibtp8)       |
+|[OctoThinker-3B-Long-Base w/ EMPO](https://huggingface.co/qingyangzhang/EMPO-OctoThinker-3B-Long-Base)       | [Wandb Report](https://api.wandb.ai/links/zqyoung1127-tianjin-university/kquibtp8)      |
 
 ## Acknowledgement
 
@@ -136,7 +138,7 @@ If you find this work helpful, please consider to **star🌟** this repo. Thanks
 @article{zhang2025right,
   title={Right Question is Already Half the Answer: Fully Unsupervised LLM Reasoning Incentivization},
   author={Zhang, Qingyang and Wu, Haitao and Zhang, Changqing and Zhao, Peilin and Bian, Yatao},
-  journal={arXiv preprint arXiv:2504.05812},
+  journal={Advances in neural information processing systems},
   year={2025}
 }
 ```
