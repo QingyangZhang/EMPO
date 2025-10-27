@@ -63,7 +63,7 @@ As trl 0.14.0 is already a relatively outdated training framework. We highly rec
 ## Verl Quick Start
 > Developed upon verl==0.4.x. See [`verl`](./verl/README.md) for details.
 
-The recommended docker image with pre-built dependency is verlai/verl:app-verl0.4-vllm0.8.5-mcore0.13.0-preview.
+The recommended docker image with pre-built dependency can be founded in [here](https://hub.docker.com/layers/verlai/verl/app-verl0.4-vllm0.8.5-mcore0.13.0-preview/images/sha256-4d7d1b118ab4a00484f677919090053ef8138b879bf5e037ef893ba9a361ea1f).
 
 ### Data Preparation
 
@@ -76,6 +76,8 @@ Place the train and val data from ['math_data'](./math_data) in your local path.
 cd verl-empo
 sh recipe/empo/scripts/run_empo_qwen2.5_math_7b.sh
 ```
+
+Remember to modify the code [here](https://github.com/QingyangZhang/EMPO/blob/c0cfff769a8c926134d10423d6db3d4dd2adb913/verl-empo/verl/utils/tracking.py#L43C13-L43C160) if you want to track the training dynamics with wandb.
 
 ### Evaluation
 
