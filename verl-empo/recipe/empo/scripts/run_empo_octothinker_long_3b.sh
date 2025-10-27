@@ -2,7 +2,6 @@
 set -x
 
 cd /mnt/shared-storage-user/p1-shared/zhangqingyang/verl-empo/
-
 # will prevent ray from buffering stdout/stderr
 export PYTHONBUFFERED=16
 
@@ -14,11 +13,14 @@ else
 fi
 echo "HAS_NVLINK: $HAS_NVLINK (detected $NVLINK_COUNT NVLink references)"
 
+# 设置推荐环境变量（如有必要，可移动到 rjob submit 的 --env 参数中）
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 export NCCL_NVLS_ENABLE="${HAS_NVLINK:-0}"
+# export NCCL_NVLS_ENABLE=False
 export MASTER_ADDR="${MASTER_ADDR:-127.0.0.1}"
 
-export WANDB_DIR="/mnt/shared-storage-user/p1-shared/zhangqingyang/wandb"
+export WANDB_API_KEY=="YOUR_WANDB_API_KEY"
+export WANDB_DIR="LOCAL_DIR"
 
 export VLLM_USE_V1=1
 
@@ -38,10 +40,10 @@ clip_ratio_low=3e-4
 clip_ratio_high=4e-4
 
 # EMPO
-target="entropy"
+target="gt"
 
 max_prompt_length=$((1024 * 1))
-max_response_length=$((1024 * 3))
+max_response_length=$((1024 * 16))
 enable_overlong_buffer=False
 overlong_buffer_len=1024
 overlong_penalty_factor=0.0
@@ -59,7 +61,7 @@ gen_prompt_bsz=$((train_prompt_bsz * 1))
 train_prompt_mini_bsz=32
 n_resp_per_prompt=16
 
-exp_name="GRPO-Qwen2.5-Math-7B"
+exp_name="GRPO-OctoThinker-Long-Base-3B"
 
 # Ray
 RAY_ADDRESS=${RAY_ADDRESS:-"http://localhost:8265"}
@@ -67,18 +69,24 @@ WORKING_DIR=${WORKING_DIR:-"${PWD}"}
 NNODES=${NNODES:-1}
 # Paths
 RAY_DATA_HOME=${RAY_DATA_HOME:-"/mnt/shared-storage-user/p1-shared"}
-MODEL_PATH=${MODEL_PATH:-"/mnt/shared-storage-user/p1-shared/llms/Qwen/Qwen2.5-Math-7B/snapshots/b101308fe89651ea5ce025f25317fea6fc07e96e"}
+MODEL_PATH=${MODEL_PATH:-"/mnt/shared-storage-user/zhangqingyang/OctoThinker-3B-Long-Zero"}
+# MODEL_PATH=${MODEL_PATH:-"/mnt/shared-storage-user/zhangqingyang/ckpts/EMPO-Qwen2.5-Math-1.5B-step-192-hf"}
 CKPTS_DIR=${CKPTS_DIR:-"/mnt/shared-storage-user/zhangqingyang/ckpts/${project_name}/${exp_name}-${TIME_TAG}"}
 
 test_data_dir=/mnt/shared-storage-user/p1-shared/zhangqingyang/math_data
 
-amc="${test_data_dir}/amc23_1010.parquet"
+amc23="${test_data_dir}/amc23_1010.parquet"
+minerva_math="${test_data_dir}/minerva_math.parquet"
+math500="${test_data_dir}/math500.parquet"
+aime24="${test_data_dir}/aime24_0726.parquet"
+olympiadbench="${test_data_dir}/olympiadbench.parquet"
 
 train_path=/mnt/shared-storage-user/p1-shared/zhangqingyang/math_data/NM_20K_1010.parquet
 
 TRAIN_FILES="['$train_path']"
-TEST_FILES="['$amc']"
 
+# TEST_FILES="['$amc23']"
+TEST_FILES="['$amc23', '$minerva_math', '$math500', '$aime24', '$olympiadbench']"
 
 # Algorithm
 temperature=1.0
@@ -95,7 +103,7 @@ offload=True
 HYDRA_FULL_ERROR=1 python3 -m recipe.empo.src.main_dapo \
     data.train_files="$TRAIN_FILES" \
     data.val_files="$TEST_FILES" \
-    data.use_shm=True \
+    data.use_shm=False \
     data.prompt_key=prompt \
     data.truncation='left' \
     data.max_prompt_length=${max_prompt_length} \
@@ -151,8 +159,8 @@ HYDRA_FULL_ERROR=1 python3 -m recipe.empo.src.main_dapo \
     actor_rollout_ref.rollout.max_num_batched_tokens=$((max_prompt_length + max_response_length)) \
     actor_rollout_ref.rollout.temperature=${temperature} \
     actor_rollout_ref.rollout.top_p=${top_p} \
-    actor_rollout_ref.rollout.val_kwargs.do_sample=True \
-    actor_rollout_ref.rollout.val_kwargs.n=16 \
+    actor_rollout_ref.rollout.val_kwargs.do_sample=False \
+    actor_rollout_ref.rollout.val_kwargs.n=1 \
     actor_rollout_ref.rollout.val_kwargs.top_k=20 \
     actor_rollout_ref.rollout.val_kwargs.top_p=0.95 \
     actor_rollout_ref.rollout.val_kwargs.temperature=1.0 \
@@ -174,11 +182,11 @@ HYDRA_FULL_ERROR=1 python3 -m recipe.empo.src.main_dapo \
     trainer.n_gpus_per_node=8 \
     trainer.nnodes=1 \
     trainer.val_before_train=True \
-    trainer.val_only=False \
+    trainer.val_only=True \
     trainer.test_freq=8 \
-    trainer.save_freq=32 \
-    trainer.total_train_steps=300 \
+    trainer.save_freq=96 \
     trainer.total_epochs=1000 \
+    trainer.total_training_steps=100 \
     trainer.default_local_dir="${CKPTS_DIR}" \
-    trainer.resume_from_path=None \
+    trainer.resume_from_path=/mnt/shared-storage-user/zhangqingyang/ckpts/EMPO/EMPO-OctoThinker-Long-Base-3B-114901/global_step_96 \
     trainer.resume_mode=disable 2>&1 | tee outputs/${exp_name}-6.log
