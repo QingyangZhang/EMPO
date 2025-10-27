@@ -77,6 +77,8 @@ cd verl-empo
 sh recipe/empo/scripts/run_empo_qwen2.5_math_7b.sh
 ```
 
+Remember to modify the code [here](https://github.com/QingyangZhang/EMPO/blob/c0cfff769a8c926134d10423d6db3d4dd2adb913/verl-empo/verl/utils/tracking.py#L43C13-L43C160) if you want to track the training dynamics with Wandb.
+
 ### Evaluation
 
 Load verl checkpoints by modifying trainer.resume_from_path.
