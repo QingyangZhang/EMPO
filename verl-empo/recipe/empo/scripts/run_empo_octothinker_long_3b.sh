@@ -40,7 +40,7 @@ clip_ratio_low=3e-4
 clip_ratio_high=4e-4
 
 # EMPO
-target="gt"
+target="entropy"
 
 max_prompt_length=$((1024 * 1))
 max_response_length=$((1024 * 16))
@@ -61,7 +61,7 @@ gen_prompt_bsz=$((train_prompt_bsz * 1))
 train_prompt_mini_bsz=32
 n_resp_per_prompt=16
 
-exp_name="GRPO-OctoThinker-Long-Base-3B"
+exp_name="EMPO-OctoThinker-Long-Base-3B"
 
 # Ray
 RAY_ADDRESS=${RAY_ADDRESS:-"http://localhost:8265"}
